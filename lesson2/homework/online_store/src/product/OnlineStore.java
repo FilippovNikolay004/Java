@@ -1,6 +1,10 @@
-package online_store;
+package product;
 
 import java.util.List;
+
+import cart.Cart;
+import user.User;
+
 import java.util.ArrayList;
 
 public class OnlineStore {
@@ -15,9 +19,22 @@ public class OnlineStore {
     public void addUser(User u) { if (u != null) users.add(u); }
     public List<User> getUsers() { return users; }
 
+    // methods
+    public void purchaseAll(Purchasable[] items) {
+        if (items == null) return;
+
+        int count = 0;
+        for (Purchasable it : items) {
+            if (it == null) continue;
+            it.purchase();
+            count++;
+        }
+        System.out.println("Processed purchases: " + count);
+    }
+
     public static final OnlineStore def_store;
     static {
-    	def_store = new OnlineStore();
+        def_store = new OnlineStore();
 
         Cart c1 = new Cart();
         c1.addToCart(new Product("iPhone 15", "Apple", 1000, "EUR"));
@@ -41,3 +58,4 @@ public class OnlineStore {
         return total;
     }
 }
+

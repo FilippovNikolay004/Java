@@ -3,11 +3,12 @@ package service;
 import java.util.List;
 
 import cart.Cart;
+
+import java.util.ArrayList;
+
 import product.Product;
 import product.Purchasable;
 import user.User;
-
-import java.util.ArrayList;
 
 public class OnlineStore {
     private final List<User> users;
@@ -28,7 +29,6 @@ public class OnlineStore {
         int count = 0;
         for (Purchasable it : items) {
             if (it == null) continue;
-            
             it.purchase();
             count++;
         }
@@ -37,7 +37,7 @@ public class OnlineStore {
 
     public static final OnlineStore def_store;
     static {
-    	def_store = new OnlineStore();
+        def_store = new OnlineStore();
 
         Cart c1 = new Cart();
         c1.addToCart(new Product("iPhone 15", "Apple", 1000, "EUR"));

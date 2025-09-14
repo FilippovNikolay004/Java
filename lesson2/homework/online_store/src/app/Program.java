@@ -40,7 +40,7 @@ public class Program {
         System.out.println("\n=== #1 ===");
         cart1.printAllProducts();
         user1.print();
-        
+
         System.out.println("\n=== #2 ===");
         cart2.printAllProducts();
         user2.print();
@@ -53,5 +53,20 @@ public class Program {
             phoneBox,
             antivirus
         });
+
+        System.out.println("\n=== findById demo ===");
+        int okId = phoneBox.getId();
+        int badId = 999;
+
+        Product found = cart1.findById(okId);
+        if (found != null) {
+            System.out.println("Found product by id=" + okId + ":");
+            found.print();
+        }
+
+        Product missing = cart1.findById(badId);
+        if (missing == null) {
+            System.out.println("Nothing found by id=" + badId);
+        }
     }
 }

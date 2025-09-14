@@ -1,7 +1,9 @@
-package online_store;
+package user;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import cart.Cart;
 
 public class User {
     private static int SEQ = 0;
@@ -11,9 +13,9 @@ public class User {
 
     public User(String name) { this(name, SEQ++); }
     public User(String name, int userId) {
-        if (name == null || name.isBlank()) 
-        	throw new IllegalArgumentException("name is required");
-        
+        if (name == null || name.isBlank())
+            throw new IllegalArgumentException("name is required");
+
         this.name = name.trim();
         this.userId = userId;
         this.carts = new ArrayList<>();
@@ -24,7 +26,7 @@ public class User {
     public void print() {
         System.out.println("User{id=" + userId + ", name='" + name + "', carts=" + carts.size() + "}");
     }
-    
+
     // getters
     public int getUserId() { return userId; }
     public String getName() { return name; }
