@@ -16,6 +16,7 @@ public class Program {
         cart1.addToCart(new Product[] {
             new Product("iPhone 15", "Apple", 1000, "EUR"),
             new Product("Galaxy S24", "Samsung", 1500, "EUR"),
+            new Product("iPhone 15", "Apple", 999, "EUR")
         });
         cart2.addToCart(new Product[] {
             new Product("ThinkPad X1", "Lenovo", 2000, "EUR")
@@ -68,5 +69,19 @@ public class Program {
         if (missing == null) {
             System.out.println("Nothing found by id=" + badId);
         }
+        
+        System.out.println("\n=== Guava Multimap: products by brand ===");
+        cart1.printProductsByBrand("Apple");
+        cart1.printProductsByBrand("Samsung");
+        cart1.printProductsByBrand("Lenovo");
+
+        System.out.println("\n=== Guava Multiset: counts ===");
+        cart1.printBrandCounts();
+        cart1.printNameCounts();
+        
+        System.out.println("\n=== Remove by name (iPhone 15) and recount ===");
+        cart1.removeFromCartByName("iPhone 15");
+        cart1.printBrandCounts();
+        cart1.printProductsByBrand("Apple");
     }
 }
