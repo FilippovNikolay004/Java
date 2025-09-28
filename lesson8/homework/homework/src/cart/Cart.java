@@ -6,6 +6,9 @@ import java.util.List;
 import product.Product;
 import Exceptions.ProductNotFoundException;
 
+import java.util.stream.Stream;
+import java.util.Collections;
+
 public class Cart {
     private List<Product> products;
 
@@ -90,6 +93,14 @@ public class Cart {
         }
     }
 
+    public Stream<Product> stream() {
+        return products.stream();
+    }
+    
+    public List<Product> toList() {
+        return Collections.unmodifiableList(products);
+    }
+    
     public float getTotal() {
         float sum = 0;
         for (Product p : products) sum += p.getPrice();

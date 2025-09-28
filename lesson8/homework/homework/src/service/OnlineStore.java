@@ -1,11 +1,11 @@
 package service;
 
-import java.util.List;
+import java.util.*;
+import java.util.stream.*;
+import java.util.Arrays;
+import java.util.Objects;
 
 import cart.Cart;
-
-import java.util.ArrayList;
-
 import product.Product;
 import product.Purchasable;
 import user.User;
@@ -22,18 +22,54 @@ public class OnlineStore {
     public void addUser(User u) { if (u != null) users.add(u); }
     public List<User> getUsers() { return users; }
 
-    // methods
-    public void purchaseAll(Purchasable[] items) {
-        if (items == null) return;
-
-        int count = 0;
-        for (Purchasable it : items) {
-            if (it == null) continue;
-            it.purchase();
-            count++;
-        }
-        System.out.println("Processed purchases: " + count);
+    public long purchaseAllParallel(Purchasable[] items) {
+        if (items == null) return 0L;
+        long count = Arrays.stream(items)
+                .parallel()
+                .filter(Objects::nonNull)
+                .peek(Purchasable::purchase)
+                .count();
+        System.out.println("Processed purchases (parallel): " + count);
+        return count;
     }
+
+    public double totalPriceParallel() {
+        return users.parallelStream()
+                .flatMap(u -> u.getCarts().stream())
+                .flatMap(Cart::stream)
+                .mapToDouble(Product::getPrice)
+                .sum();
+    }
+
+    public Map<String, Long> countByBrandParallel() {
+        return users.parallelStream()
+                .flatMap(u -> u.getCarts().stream())
+                .flatMap(Cart::stream)
+                .collect(Collectors.groupingBy(
+                        Product::getBrand,
+                        Collectors.counting()
+                ));
+    }
+
+    
+    public List<Product> topNByPrice(int n) {
+        return users.parallelStream()
+                .flatMap(u -> u.getCarts().stream())
+                .flatMap(Cart::stream)
+                .sorted(Comparator.comparingDouble(Product::getPrice).reversed())
+                .limit(n)
+                .collect(Collectors.toList());
+    }
+
+    
+    public DoubleSummaryStatistics priceStatsParallel() {
+        return users.parallelStream()
+                .flatMap(u -> u.getCarts().stream())
+                .flatMap(Cart::stream)
+                .mapToDouble(Product::getPrice)
+                .summaryStatistics();
+    }
+    
 
     public static final OnlineStore def_store;
     static {

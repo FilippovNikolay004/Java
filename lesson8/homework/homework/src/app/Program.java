@@ -8,21 +8,12 @@ import product.Purchasable;
 import service.OnlineStore;
 import user.User;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
-import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.DoubleSummaryStatistics;
 
 public class Program {
     public static void main(String[] args) {
-    	Order o = new Order();
-        o.setId(1L);
-        o.setCustomerName("Nikolay");
-        o.setTotalAmount(new BigDecimal("123.45"));
-        o.setCreatedAt(LocalDateTime.now());
-        o.setItems(Arrays.asList("iPhone 15", "Antivirus Pro"));
-        System.out.println("Customer: " + o.getCustomerName());
-        System.out.println(o);
-        
         Cart cart1 = new Cart();
         Cart cart2 = new Cart();
 
@@ -60,8 +51,8 @@ public class Program {
 
         System.out.println("\nTotal products in store: " + OnlineStore.totalProductsCount());
 
-        System.out.println("\n=== purchaseAll demo ===");
-        store.purchaseAll(new Purchasable[] {
+        System.out.println("\n=== purchaseAll demo (PARALLEL) ===");
+        store.purchaseAllParallel(new Purchasable[] {
             new Product("Gift Card", "Store", 25, "EUR"),
             phoneBox,
             antivirus
@@ -81,5 +72,22 @@ public class Program {
         if (missing == null) {
             System.out.println("Nothing found by id=" + badId);
         }
+        
+        System.out.println("\n=== Parallel Streams analytics ===");
+        double total = store.totalPriceParallel();
+        System.out.println("Parallel total price across all carts: " + total + " EUR");
+
+        Map<String, Long> byBrand = store.countByBrandParallel();
+        System.out.println("Counts by brand (parallel): " + byBrand);
+
+        List<Product> top2 = store.topNByPrice(2);
+        System.out.println("Top-2 by price (parallel):");
+        for (Product p : top2) {
+            p.print();
+            System.out.println();
+        }
+
+        DoubleSummaryStatistics stats = store.priceStatsParallel();
+        System.out.println("Price stats (parallel): " + stats);
     }
 }
